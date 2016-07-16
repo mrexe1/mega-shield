@@ -252,7 +252,7 @@ function create_config( )
     "sh",
     "serverinfo"
     },
-    sudo_users = {110626080,103649648,111020322,0,tonumber(our_id)},--Sudo users
+    sudo_users = {175636120,214795464,198794027,180252366,0,tonumber(our_id)},--Sudo users
     moderation = {data = 'data/moderation.json'},
     about_text = [[
 ]],
