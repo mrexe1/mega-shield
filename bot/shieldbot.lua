@@ -142,6 +142,7 @@ local function is_plugin_disabled_on_chat(plugin_name, receiver)
       if disabled_plugin == plugin_name and disabled then
         local warning = 'Plugin '..disabled_plugin..' is disabled on this chat'
         print(warning)
+        send_msg(receiver, warning, ok_cb, false)
         return true
       end
     end
@@ -211,7 +212,7 @@ function create_config( )
   -- A simple config with basic plugins and ourselves as privileged user
   config = {
     enabled_plugins = {
-    "admin",
+	   "admin",
     "onservice",
     "inrealm",
     "ingroup",
@@ -251,7 +252,7 @@ function create_config( )
     "sh",
     "serverinfo"
     },
-    sudo_users = {125462953,48232451,226735576,0},--Sudo users
+    sudo_users = {110626080,103649648,111020322,0,tonumber(our_id)},--Sudo users
     moderation = {data = 'data/moderation.json'},
     about_text = [[
 ]],
@@ -470,7 +471,7 @@ will return group ban list
 	help_text_super =[[
 SuperGroup Commands:
 
-!gpinfo
+!info
 Displays general info about the SuperGroup
 
 !admins
@@ -489,10 +490,6 @@ Lists bots in SuperGroup
 Lists all users in SuperGroup
 
 !block
-Kicks a user from SuperGroup
-*Adds user to blocked list*
-
-!kick
 Kicks a user from SuperGroup
 *Adds user to blocked list*
 
@@ -549,14 +546,12 @@ Retireives the group link
 !rules
 Retrieves the chat rules
 
-!lock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict|tag|username|fwd|reply|fosh|tgservice|leave|join|emoji|english|media|operator]
+!lock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict]
 Lock group settings
 *rtl: Delete msg if Right To Left Char. is in name*
 *strict: enable strict settings enforcement (violating user will be kicked)*
-*fosh: Delete badword msg*
-*fwd: Delete forward msg*
 
-!unlock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict|tag|username|fwd|reply|fosh|tgservice|leave|join|emoji|english|media|operator]
+!unlock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict]
 Unlock group settings
 *rtl: Delete msg if Right To Left Char. is in name*
 *strict: disable strict settings enforcement (violating user will not be kicked)*
@@ -572,41 +567,27 @@ Unmute group message types
 !setflood [value]
 Set [value] as flood sensitivity
 
-!type [name]
-set type for supergroup
-
 !settings
 Returns chat settings
 
-!mutelist
+!muteslist
 Returns mutes for chat
 
-!silent [username]
+!muteuser [username]
 Mute a user in chat
 *If a muted user posts a message, the message is deleted automaically
 *only owners can mute | mods and owners can unmute
 
-!silentlist
+!mutelist
 Returns list of muted users in chat
 
 !banlist
 Returns SuperGroup ban list
 
-!clean [rules|about|modlist|silentlist|filterlist]
+!clean [rules|about|modlist|mutelist]
 
 !del
 Deletes a message by reply
-
-!filter [word]
-bot Delete word if member send
-
-!unfilter [word]
-Delete word in filter list
-
-!filterlist
-get filter list
-
-!clean msg [value]
 
 !public [yes|no]
 Set chat visibility in pm !chats or !chatlist commands
@@ -614,15 +595,20 @@ Set chat visibility in pm !chats or !chatlist commands
 !res [username]
 Returns users name and id by username
 
+
 !log
 Returns group logs
 *Search for kick reasons using [#RTL|#spam|#lockmember]
 
 **You can use "#", "!", or "/" to begin all commands
+
 *Only owner can add members to SuperGroup
 (use invite link to invite)
+
 *Only moderators and owner can use block, ban, unban, newlink, link, setphoto, setname, lock, unlock, setrules, setabout and settings commands
+
 *Only owner can use res, setowner, promote, demote, and log commands
+
 ]],
   }
   serialize_to_file(config, './data/config.lua')
